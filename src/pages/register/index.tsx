@@ -4,32 +4,43 @@ import { useRef } from "react";
 import axios from "axios";
 
 const Register = () => {
-  const nameRef = useRef("");
-  const emailRef = useRef("");
-  const passwordRef = useRef("");
+    const nameRef = useRef<HTMLInputElement>(null);
+
+    const emailRef = useRef<HTMLInputElement>(null);
+
+    const passwordRef = useRef<HTMLInputElement>(null);
+
   const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
-    const user = {
-      name: nameRef.current.value,
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-    };
-    axios
-      .post("https://auth-rg69.onrender.com/api/auth" + "/signup", user)
-      .then((el) => {
-        console.log(el.data.message);
-        if (el.data.message == "User registered successfully!") {
-          navigate("/signin");
-        }
-      })
-      .catch((err) => {
-        alert(
-          "Bunday foydalanuvchi nomi mavjud bo'lishi yoki serverda hatolik bo'lishi mumkin! "
-        );
-      });
+  
+    // nameRef ve emailRef null kontrolü
+    if (nameRef.current && emailRef.current && passwordRef.current) {
+      const user = {
+        name: nameRef.current.value,
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      };
+  
+      axios
+        .post("https://auth-rg69.onrender.com/api/auth" + "/signup", user)
+        .then((el) => {
+          console.log(el.data.message);
+          if (el.data.message === "User registered successfully!") {
+            navigate("/signin");
+          }
+        })
+        .catch((err) => {
+          alert(
+            "Bunday foydalanuvchi nomi mavjud bo'lishi yoki serverda hatolik bo'lishi mumkin! "
+          );
+        });
+    } else {
+      console.error("Ref current is null");
+    }
   }
+  
 
   return (
     <div style={bodyStyle}>

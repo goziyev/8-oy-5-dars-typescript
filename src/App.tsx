@@ -8,7 +8,8 @@ import { useSelector } from "react-redux";
 import ErrorPage from "./pages/errorpage";
 
 function App() {
-  const token = useSelector((state) => state.userToken.token);
+  const token = useSelector((state: RootState) => state.userToken.token);
+
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -22,6 +23,10 @@ function App() {
     children,
     redirectTo = "/login",
     isAuthentication,
+  }: {
+    children: React.ReactNode;
+    redirectTo?: string;
+    isAuthentication: boolean;
   }) {
     useEffect(() => {
       if (!isAuthentication) {

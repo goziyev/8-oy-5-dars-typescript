@@ -2,38 +2,42 @@ import { useNavigate } from "react-router-dom";
 import "./index.css";
 import { useRef } from "react";
 import axios from "axios";
-import { setToken } from "../../store/userToken";
 import { useDispatch } from "react-redux";
-
+import { setToken } from "../../store/userToken";
 const Register = () => {
-  const nameRef = useRef("");
-  const passwordRef = useRef("");
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  const passwordRef = useRef<HTMLInputElement>(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   function handleSubmit(e) {
     e.preventDefault();
-    const user = {
-      name: nameRef.current.value,
-      password: passwordRef.current.value,
-    };
-    axios
-      .post("https://auth-rg69.onrender.com/api/auth" + "/signin", user)
-      .then((el) => {
-        console.log(el.data.message);
-        // if (el.data.message == "User registered successfully!") {
-        //   navigate("/signin");
-        // }
-        if (el.data.accessToken) {
-          navigate("/");
-          dispatch(setToken(el.data.accessToken));
-          localStorage.setItem("token", el.data.accessToken);
-        }
-      })
-      .catch((err) => {
-        alert(
-          "Bunday foydalanuvchi nomi mavjud bo'lishi yoki serverda hatolik bo'lishi mumkin! "
-        );
-      });
+
+    // nameRef ve emailRef null kontrolü
+    if (nameRef.current && passwordRef.current) {
+      const user = {
+        name: nameRef.current.value,
+        password: passwordRef.current.value,
+      };
+
+      axios
+        .post("https://auth-rg69.onrender.com/api/auth" + "/signin", user)
+        .then((el) => {
+          if (el.data.id) {
+            dispatch(setToken(el.data.accessToken));
+            localStorage.setItem("token", el.data.accessToken);
+            navigate("/signin");
+          }
+        })
+        .catch((err) => {
+          alert(
+            "Bunday foydalanuvchi nomi mavjud bo'lishi yoki serverda hatolik bo'lishi mumkin! "
+          );
+        });
+    } else {
+      console.error("Ref current is null");
+    }
   }
 
   return (
@@ -60,10 +64,10 @@ const Register = () => {
           </button>
           <div className="register-link">
             <p>
-              Dont Have an account?{" "}
+              Don't have an account?
               <a
                 onClick={() => {
-                  navigate("/login");
+                  navigate("/register");
                 }}
               >
                 Register
