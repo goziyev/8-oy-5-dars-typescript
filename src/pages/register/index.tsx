@@ -12,10 +12,8 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
   
-    // nameRef ve emailRef null kontrolü
     if (nameRef.current && emailRef.current && passwordRef.current) {
       const user = {
         name: nameRef.current.value,
@@ -33,7 +31,7 @@ const Register = () => {
         })
         .catch((err) => {
           alert(
-            "Bunday foydalanuvchi nomi mavjud bo'lishi yoki serverda hatolik bo'lishi mumkin! "
+          err
           );
         });
     } else {
@@ -64,7 +62,9 @@ const Register = () => {
             />
             <i className="bx bxs-lock-alt" />
           </div>
-          <button type="submit" className="btn">
+          <button type="submit" className="btn" onClick={(e) => {
+            e.preventDefault()
+          }}>
             Register
           </button>
           <div className="register-link">

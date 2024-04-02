@@ -1,11 +1,14 @@
-import { combineReducers, createStore } from "@reduxjs/toolkit";
-import userTokenReducer from "./userToken";
+// store.ts
 
-export type RootState = ReturnType<typeof rootReducer>; // Define RootState first
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import userTokenReducer from './userToken';
 
 const rootReducer = combineReducers({
   userToken: userTokenReducer,
 });
 
-const store = createStore(rootReducer); // Use createStore with rootReducer
-export default store;
+export const store = configureStore({
+  reducer: rootReducer,
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
