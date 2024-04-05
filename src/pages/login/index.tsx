@@ -12,9 +12,6 @@ const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   function handleSubmit() {
-    // preventDefault();
-
-    // nameRef ve emailRef null kontrolü
     if (nameRef.current && passwordRef.current) {
       const user = {
         name: nameRef.current.value,
@@ -24,16 +21,16 @@ const Register = () => {
       axios
         .post("https://auth-rg69.onrender.com/api/auth" + "/signin", user)
         .then((el) => {
-          if (el.data.id) {
+          console.log(el);
+
+          if (el) {
             dispatch(setToken(el.data.accessToken));
             localStorage.setItem("token", el.data.accessToken);
             navigate("/signin");
           }
         })
         .catch((err) => {
-          alert(
-           err
-          );
+          alert(err);
         });
     } else {
       console.error("Ref current is null");
@@ -59,9 +56,14 @@ const Register = () => {
             />
             <i className="bx bxs-lock-alt" />
           </div>
-          <button type="submit" className="btn" onClick={(e) => {
-            e.preventDefault()
-          }}>
+          <button
+            type="submit"
+            className="btn"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
             Register
           </button>
           <div className="register-link">

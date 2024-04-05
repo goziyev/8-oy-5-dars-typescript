@@ -4,41 +4,37 @@ import { useRef } from "react";
 import axios from "axios";
 
 const Register = () => {
-    const nameRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
-    const emailRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
 
-    const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
   function handleSubmit() {
-  
     if (nameRef.current && emailRef.current && passwordRef.current) {
       const user = {
         name: nameRef.current.value,
         email: emailRef.current.value,
         password: passwordRef.current.value,
       };
-  
+
       axios
         .post("https://auth-rg69.onrender.com/api/auth" + "/signup", user)
         .then((el) => {
-          console.log(el.data.message);
+          console.log(el);
           if (el.data.message === "User registered successfully!") {
             navigate("/signin");
           }
         })
         .catch((err) => {
-          alert(
-          err
-          );
+          alert(err);
         });
     } else {
       console.error("Ref current is null");
     }
   }
-  
 
   return (
     <div style={bodyStyle}>
@@ -62,9 +58,14 @@ const Register = () => {
             />
             <i className="bx bxs-lock-alt" />
           </div>
-          <button type="submit" className="btn" onClick={(e) => {
-            e.preventDefault()
-          }}>
+          <button
+            type="submit"
+            className="btn"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
             Register
           </button>
           <div className="register-link">
